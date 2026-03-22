@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# 1. Date Conexiune
+DB_URL="jdbc:postgresql://ep-super-dust-a9dgzgyx-pooler.gwc.azure.neon.tech/neondb?sslmode=require"
+DB_USER="neondb_owner"
+DB_PASS='npg_3juWleMZFJ4w'
+
+# 2. CAILE CORECTE
+# Schimbăm punctul în slash, pentru că pe disc sunt foldere separate
+CHANGELOG_FILE="db/changelog/db.changelog-master.xml"
+SEARCH_PATH="4FitBackend/src/main/resources"
+
+# Folosim fitdb (recomandat litere mici) sau "4FitDB" cu ghilimele dacă ai creat-o așa
+DEFAULT_SCHEMA="fitdb"
+
+echo "🚀 Rulăm Liquibase din $SEARCH_PATH..."
+
+liquibase \
+  --url="$DB_URL" \
+  --username="$DB_USER" \
+  --password="$DB_PASS" \
+  --search-path="$SEARCH_PATH" \
+  --changelog-file="$CHANGELOG_FILE" \
+  --default-schema-name="$DEFAULT_SCHEMA" \
+  --liquibase-schema-name="$DEFAULT_SCHEMA" \
+  update
