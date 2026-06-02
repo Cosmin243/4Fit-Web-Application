@@ -1,0 +1,35 @@
+<section class="py-20">
+  <div class="container grid lg:grid-cols-2 gap-14">
+    <div>
+      <p class="section-eyebrow">Contact</p>
+      <h1 class="text-4xl md:text-5xl font-bold mb-6">Hai să vorbim despre obiectivele tale</h1>
+      <p class="text-muted-foreground text-lg leading-relaxed mb-10">Trimite-ne un mesaj sau vino direct la sală pentru o vizită și o evaluare inițială.</p>
+      <div class="space-y-5">
+        <div class="flex gap-4 bg-card border border-border rounded p-5">
+          <i class="pi pi-map-marker text-primary text-2xl"></i>
+          <div><h3 class="font-heading">Adresă</h3><p class="text-muted-foreground text-sm">Str. Exemplu nr. 10, București</p></div>
+        </div>
+        <div class="flex gap-4 bg-card border border-border rounded p-5">
+          <i class="pi pi-phone text-primary text-2xl"></i>
+          <div><h3 class="font-heading">Telefon</h3><p class="text-muted-foreground text-sm">0749 123 456</p></div>
+        </div>
+        <div class="flex gap-4 bg-card border border-border rounded p-5">
+          <i class="pi pi-clock text-primary text-2xl"></i>
+          <div><h3 class="font-heading">Program</h3><p class="text-muted-foreground text-sm">L-V: 7:00 - 22:00 / S-D: 9:00 - 16:00</p></div>
+        </div>
+      </div>
+    </div>
+
+    <form class="bg-card border border-border rounded p-8" (ngSubmit)="submit()">
+      <h2 class="text-3xl font-bold mb-6">Scrie-ne</h2>
+      <label class="block text-sm font-heading tracking-wider mb-2">Nume</label>
+      <input class="form-field mb-5" [(ngModel)]="form.name" name="name" placeholder="Numele tău" />
+      <label class="block text-sm font-heading tracking-wider mb-2">Email</label>
+      <input class="form-field mb-5" [(ngModel)]="form.email" name="email" placeholder="email@example.com" type="email" />
+      <label class="block text-sm font-heading tracking-wider mb-2">Mesaj</label>
+      <textarea class="form-field mb-6 min-h-36" [(ngModel)]="form.message" name="message" placeholder="Cu ce te putem ajuta?"></textarea>
+      <button class="btn btn-primary w-full" type="submit">Trimite mesajul</button>
+      <p *ngIf="sent" class="text-primary text-sm mt-4">Mesaj trimis local în demo. Backend-ul poate fi conectat ulterior.</p>
+    </form>
+  </div>
+</section>

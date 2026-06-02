@@ -1,0 +1,45 @@
+<section class="py-20">
+  <div class="container">
+    <div class="text-center mb-8">
+      <p class="section-eyebrow">Program</p>
+      <h1 class="text-4xl md:text-5xl font-bold">Orar clase</h1>
+      <p class="text-muted-foreground mt-4 max-w-2xl mx-auto text-sm">Numarul persoanelor este limitat. Programarile se fac cu cel putin 3 ore inainte de inceperea clasei.</p>
+    </div>
+
+    <p *ngIf="eroare" class="text-center text-muted-foreground text-sm mb-6">{{ eroare }}</p>
+
+    <div *ngIf="days.length; else empty" class="grid grid-cols-1 md:grid-cols-7 gap-px bg-border rounded overflow-hidden">
+      <div *ngFor="let day of days" class="bg-card">
+        <div class="bg-secondary p-3 text-center">
+          <p class="font-heading text-sm font-semibold capitalize">{{ day.label }}</p>
+          <p class="text-xs text-muted-foreground">{{ day.date }}</p>
+        </div>
+        <div class="p-2 space-y-2 min-h-[460px]">
+          <div *ngFor="let cls of day.classes" class="border-l-4 bg-secondary/50 rounded-r p-2 text-xs space-y-1" [ngClass]="categoryClass(cls.tipClasa)">
+            <img [src]="cls.imagineUrl" [alt]="cls.nume" class="w-full h-20 object-cover rounded mb-2" />
+            <p class="text-muted-foreground">{{ cls.dataOra | date:'HH:mm' }} - {{ endTime(cls) | date:'HH:mm' }}</p>
+            <p class="font-semibold text-foreground leading-tight">{{ cls.nume }}</p>
+            <p class="text-muted-foreground">{{ cls.antrenor }}</p>
+            <p class="text-muted-foreground">{{ cls.participantiInscrisi }}/{{ cls.maxParticipanti }} locuri</p>
+
+            <button *ngIf="profil?.abonat"
+                    class="btn w-full !min-h-7 !py-1 !px-2 text-[10px] mt-1"
+                    [ngClass]="cls.inscris ? 'btn-outline' : 'btn-primary'"
+                    (click)="cls.inscris ? retrage(cls) : inscrie(cls)">
+              {{ cls.inscris ? 'Retrage-te' : 'Inscrie-te' }}
+            </button>
+          </div>
+          <div *ngIf="!day.classes.length" class="h-full min-h-24 flex items-center justify-center text-center px-3">
+            <p class="text-muted-foreground text-xs">Nu sunt clase programate.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #empty>
+      <div class="bg-card border border-border rounded p-8 text-center">
+        <p class="text-muted-foreground">Nu exista clase active momentan.</p>
+      </div>
+    </ng-template>
+  </div>
+</section>

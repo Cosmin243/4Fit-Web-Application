@@ -1,0 +1,106 @@
+<section class="py-20">
+  <div class="container max-w-5xl">
+    <div class="text-center mb-12">
+      <p class="section-eyebrow">Contul meu</p>
+      <h1 class="text-4xl md:text-5xl font-bold">Profil membru</h1>
+    </div>
+
+    <div *ngIf="utilizator; else loading" class="grid md:grid-cols-3 gap-6">
+      <div class="bg-card border border-border rounded p-6 md:col-span-1">
+        <div class="w-24 h-24 rounded-full bg-secondary flex items-center justify-center mb-4 overflow-hidden">
+          <img *ngIf="utilizator.abonat && utilizator.pozaProfil; else profileIcon" [src]="utilizator.pozaProfil" alt="Poza profil" class="w-full h-full object-cover" />
+          <ng-template #profileIcon>
+            <i class="pi pi-user text-primary text-4xl"></i>
+          </ng-template>
+        </div>
+        <h2 class="text-2xl font-bold">{{ utilizator.prenume }} {{ utilizator.nume }}</h2>
+        <p class="text-muted-foreground text-sm">{{ utilizator.email }}</p>
+        <p class="text-xs mt-2 px-2 py-1 rounded bg-secondary inline-block">{{ utilizator.rol }}</p>
+
+        <div *ngIf="utilizator.abonat" class="mt-5 space-y-2">
+          <label class="btn btn-outline w-full cursor-pointer !min-h-10">
+            {{ utilizator.pozaProfil ? 'Inlocuieste poza' : 'Adauga poza' }}
+            <input type="file" accept="image/*" class="hidden" (change)="schimbaPoza($event)" />
+          </label>
+          <button *ngIf="utilizator.pozaProfil" class="btn btn-outline w-full !min-h-10" type="button" (click)="stergePoza()">
+            Sterge poza
+          </button>
+        </div>
+
+        <div *ngIf="utilizator.abonat" class="mt-6 bg-secondary rounded p-4">
+          <p class="text-muted-foreground text-xs">Sold curent</p>
+          <p class="font-heading text-2xl text-primary">{{ utilizator.sold }} lei</p>
+        </div>
+
+        <a *ngIf="utilizator.adminSauManager" routerLink="/administrare" class="btn btn-primary mt-6 w-full">
+          Administrare
+        </a>
+        <button class="btn btn-outline mt-3 w-full" (click)="authService.logout()">Deconectare</button>
+      </div>
+
+      <div *ngIf="utilizator.abonat; else managerView" class="md:col-span-2 space-y-6">
+        <div class="bg-card border border-border rounded p-6">
+          <h3 class="font-heading text-xl mb-4">Abonamente active</h3>
+          <div *ngIf="utilizator.abonamenteActive?.length; else noSubscriptions" class="grid sm:grid-cols-2 gap-4">
+            <div *ngFor="let abonament of utilizator.abonamenteActive" class="bg-secondary rounded p-4">
+              <p class="font-heading text-xl">{{ abonament.tipAbonament }}</p>
+              <p class="text-muted-foreground text-sm">Expira: {{ abonament.dataEnd | date:'dd.MM.yyyy' }}</p>
+              <p class="text-sm mt-2">Clase ramase: {{ abonament.sedinteClaseRamase }}</p>
+              <p class="text-sm">Antrenor ramase: {{ abonament.sedinteAntrenorRamase }}</p>
+            </div>
+          </div>
+          <ng-template #noSubscriptions>
+            <p class="text-muted-foreground text-sm">Nu ai abonamente active.</p>
+          </ng-template>
+        </div>
+
+        <div class="bg-card border border-border rounded p-6">
+          <h3 class="font-heading text-xl mb-4">Clase inscrise</h3>
+          <div *ngIf="utilizator.inscrieriActive?.length; else noClasses" class="space-y-3">
+            <div *ngFor="let inscriere of utilizator.inscrieriActive" class="bg-secondary rounded p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div>
+                <p class="font-semibold">{{ inscriere.clasaNume }}</p>
+                <p class="text-muted-foreground text-sm">{{ inscriere.dataOra | date:'dd.MM.yyyy HH:mm' }} / {{ inscriere.sala }}</p>
+              </div>
+              <a routerLink="/orar-clase" class="btn btn-outline !min-h-9">Vezi orarul</a>
+            </div>
+          </div>
+          <ng-template #noClasses>
+            <p class="text-muted-foreground text-sm">Nu esti inscris la clase momentan.</p>
+          </ng-template>
+        </div>
+
+        <div class="bg-card border border-border rounded p-6">
+          <h3 class="font-heading text-xl mb-4">Cumpara abonament</h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div *ngFor="let tip of utilizator.tipuriAbonamente" class="rounded border border-border p-4">
+              <p class="font-heading text-lg">{{ tip.nume }}</p>
+              <p class="text-primary font-heading text-2xl my-2">{{ tip.pret }} lei</p>
+              <p class="text-muted-foreground text-sm">Clase: {{ tip.sedinteClase }} / Antrenor: {{ tip.sedinteAntrenor }}</p>
+              <button class="btn btn-primary w-full mt-4" (click)="cumpara(tip.id)">Cumpara</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #managerView>
+        <div class="bg-card border border-border rounded p-6 md:col-span-2">
+          <h3 class="font-heading text-xl mb-4">Date cont</h3>
+          <p class="text-muted-foreground text-sm">Contul tau are rol de {{ utilizator.rol }}. Functionalitatile de administrare vor fi adaugate ulterior.</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <ng-template #loading>
+      <div class="bg-card border border-border rounded p-8 text-center">
+        <div *ngIf="eroare; else spinner">
+          <p class="text-muted-foreground mb-6">{{ eroare }}</p>
+          <a routerLink="/login" class="btn btn-primary">Login</a>
+        </div>
+        <ng-template #spinner>
+          <p class="text-muted-foreground">Se incarca profilul...</p>
+        </ng-template>
+      </div>
+    </ng-template>
+  </div>
+</section>

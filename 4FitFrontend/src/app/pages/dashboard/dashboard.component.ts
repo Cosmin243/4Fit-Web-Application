@@ -4,11 +4,7 @@ import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  template: `
-    <h1>Bun venit, {{ username }}!</h1>
-    <p>Roluri: {{ roles.join(', ') }}</p>
-    <button (click)="logout()">Logout</button>
-  `
+  templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
   username = '';
@@ -17,6 +13,8 @@ export class DashboardComponent {
   constructor(private authService: AuthService) {
     this.username = authService.getUsername();
     this.roles = authService.getRoles();
+    console.log(this.roles);
+    console.log(this.username);
   }
 
   logout() {

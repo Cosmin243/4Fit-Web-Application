@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class KeycloakRoleConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
@@ -23,7 +24,7 @@ public class KeycloakRoleConverter implements Converter<Jwt, Collection<GrantedA
 
         return ((List<String>) realmAccess.get("roles"))
                 .stream()
-                .map(roleName -> "ROLE_" + roleName)
+                .map(roleName -> "ROLE_" + roleName.toUpperCase(Locale.ROOT))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }

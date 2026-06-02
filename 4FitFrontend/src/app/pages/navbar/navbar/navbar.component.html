@@ -1,0 +1,84 @@
+<nav class="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b border-border">
+  <div class="container flex items-center justify-between h-16">
+    <a routerLink="/" class="font-heading text-2xl font-bold tracking-wider text-primary" (click)="close()">
+      IRON<span class="text-foreground">FIT</span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-6">
+      <div class="relative group">
+        <button class="font-heading text-sm tracking-widest text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">
+          Servicii <i class="pi pi-chevron-down text-[10px]"></i>
+        </button>
+        <div class="absolute right-0 top-full hidden group-hover:block pt-3">
+          <div class="min-w-48 bg-popover border border-border rounded shadow-xl py-2">
+            <a *ngFor="let item of servicii" [routerLink]="item.routerLink" class="block px-4 py-2 text-sm text-popover-foreground hover:bg-secondary">
+              {{ item.label }}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative group">
+        <button class="font-heading text-sm tracking-widest text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">
+          Clase <i class="pi pi-chevron-down text-[10px]"></i>
+        </button>
+        <div class="absolute right-0 top-full hidden group-hover:block pt-3">
+          <div class="min-w-40 bg-popover border border-border rounded shadow-xl py-2">
+            <a *ngFor="let item of clase" [routerLink]="item.routerLink" class="block px-4 py-2 text-sm text-popover-foreground hover:bg-secondary">
+              {{ item.label }}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <a routerLink="/orar-clase" class="font-heading text-sm tracking-widest text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">
+        <i class="pi pi-calendar text-xs"></i> Orar clase
+      </a>
+      <a routerLink="/tarife" class="font-heading text-sm tracking-widest text-muted-foreground hover:text-primary transition-colors">Tarife</a>
+      <a routerLink="/echipa" class="font-heading text-sm tracking-widest text-muted-foreground hover:text-primary transition-colors">Echipa</a>
+      <a routerLink="/contact" class="font-heading text-sm tracking-widest text-muted-foreground hover:text-primary transition-colors">Contact</a>
+      <a *ngIf="isAdminOrManager" routerLink="/administrare" class="font-heading text-sm tracking-widest text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">
+        <i class="pi pi-shield text-xs"></i> Administrare
+      </a>
+
+      <ng-container *ngIf="isLoggedIn; else loginButton">
+        <button type="button" class="btn btn-ghost !min-h-10 !px-3" (click)="goToProfile()" aria-label="Profil">
+          <i class="pi pi-user"></i>
+        </button>
+        <button type="button" class="btn btn-ghost !min-h-10 !px-3" (click)="logout()" aria-label="Deconectare">
+          <i class="pi pi-sign-out"></i>
+        </button>
+      </ng-container>
+      <ng-template #loginButton>
+        <a routerLink="/login" class="btn btn-ghost !min-h-10 !px-3" aria-label="Autentificare">
+          <i class="pi pi-sign-in"></i>
+        </a>
+      </ng-template>
+    </div>
+
+    <button type="button" class="md:hidden text-foreground text-xl" (click)="open = !open" aria-label="Meniu">
+      <i class="pi" [ngClass]="open ? 'pi-times' : 'pi-bars'"></i>
+    </button>
+  </div>
+
+  <div *ngIf="open" class="md:hidden bg-background border-t border-border py-4">
+    <p class="px-6 py-2 text-xs text-muted-foreground font-heading tracking-widest">Servicii</p>
+    <a *ngFor="let item of servicii" [routerLink]="item.routerLink" (click)="close()" class="block px-8 py-2 text-sm text-foreground hover:text-primary">{{ item.label }}</a>
+    <p class="px-6 py-2 mt-2 text-xs text-muted-foreground font-heading tracking-widest">Clase</p>
+    <a *ngFor="let item of clase" [routerLink]="item.routerLink" (click)="close()" class="block px-8 py-2 text-sm text-foreground hover:text-primary">{{ item.label }}</a>
+    <a routerLink="/orar-clase" (click)="close()" class="block px-6 py-3 font-heading text-sm tracking-widest text-muted-foreground hover:text-primary">Orar clase</a>
+    <a routerLink="/tarife" (click)="close()" class="block px-6 py-3 font-heading text-sm tracking-widest text-muted-foreground hover:text-primary">Tarife</a>
+    <a routerLink="/echipa" (click)="close()" class="block px-6 py-3 font-heading text-sm tracking-widest text-muted-foreground hover:text-primary">Echipa</a>
+    <a routerLink="/contact" (click)="close()" class="block px-6 py-3 font-heading text-sm tracking-widest text-muted-foreground hover:text-primary">Contact</a>
+    <a *ngIf="isAdminOrManager" routerLink="/administrare" (click)="close()" class="block px-6 py-3 font-heading text-sm tracking-widest text-muted-foreground hover:text-primary">Administrare</a>
+    <div class="px-6 pt-2">
+      <div *ngIf="isLoggedIn; else mobileLogin" class="flex gap-2">
+        <button type="button" class="btn btn-outline flex-1 !min-h-10" (click)="goToProfile()">Profil</button>
+        <button type="button" class="btn btn-outline flex-1 !min-h-10" (click)="logout()">Deconectare</button>
+      </div>
+      <ng-template #mobileLogin>
+        <a routerLink="/login" (click)="close()" class="btn btn-primary w-full !min-h-10">Autentificare</a>
+      </ng-template>
+    </div>
+  </div>
+</nav>
